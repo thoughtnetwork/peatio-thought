@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Peatio
-  module Dash
+  module Thought
     class Railtie < Rails::Railtie
       config.before_initialize do
         Hooks.check_compatibility

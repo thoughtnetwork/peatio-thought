@@ -5,16 +5,16 @@ require "active_support/core_ext/enumerable"
 require "peatio"
 
 module Peatio
-  module Dash
+  module Thought
     require "bigdecimal"
     require "bigdecimal/util"
 
-    require "peatio/dash/blockchain"
-    require "peatio/dash/client"
-    require "peatio/dash/wallet"
+    require "peatio/thought/blockchain"
+    require "peatio/thought/client"
+    require "peatio/thought/wallet"
 
-    require "peatio/dash/hooks"
+    require "peatio/thought/hooks"
 
-    require "peatio/dash/version"
+    require "peatio/thought/version"
   end
 end

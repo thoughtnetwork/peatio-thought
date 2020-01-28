@@ -2,11 +2,11 @@
 
 lib = File.expand_path("lib", __dir__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require "peatio/dash/version"
+require "peatio/thought/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "peatio-dash"
-  spec.version       = Peatio::Dash::VERSION
+  spec.name          = "peatio-thought"
+  spec.version       = Peatio::Thought::VERSION
   spec.authors       = ["MoD"]
   spec.email         = ["mod@websys.io"]
 

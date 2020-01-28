@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    peatio-dash (2.4.0)
+    peatio-thought (2.4.0)
       activesupport (~> 5.2.3)
       better-faraday (~> 1.0.5)
       faraday (~> 0.15.4)
@@ -133,7 +133,7 @@ DEPENDENCIES
   bundler (~> 1.17)
   irb
   mocha (~> 1.8)
-  peatio-dash!
+  peatio-thought!
   pry-byebug
   rake (~> 10.0)
   rspec (~> 3.0)

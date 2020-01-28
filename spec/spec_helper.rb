@@ -5,7 +5,7 @@ require "pry-byebug"
 require "webmock/rspec"
 require "mocha"
 require "simplecov"
-require "peatio/dash"
+require "peatio/thought"
 
 RSpec.configure do |config|
   # Enable flags like --only-failures and --next-failure

@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-RSpec.describe Peatio::Dash::Client do
+RSpec.describe Peatio::Thought::Client do
   let(:uri) { "http://admin:admin@127.0.0.1:19998" }
   let(:uri_without_authority) { "http://127.0.0.1:19998" }
 
   before(:all) { WebMock.disable_net_connect! }
   after(:all) { WebMock.allow_net_connect! }
 
-  subject { Peatio::Dash::Client.new(uri) }
+  subject { Peatio::Thought::Client.new(uri) }
 
   context :initialize do
     it { expect { subject }.not_to raise_error }
@@ -50,7 +50,7 @@ RSpec.describe Peatio::Dash::Client do
 
       it do
         expect { subject.json_rpc(:methodnotfound) }.to \
-          raise_error(Peatio::Dash::Client::ResponseError, "Method not found (-32601)")
+          raise_error(Peatio::Thought::Client::ResponseError, "Method not found (-32601)")
       end
     end
 
@@ -69,7 +69,7 @@ RSpec.describe Peatio::Dash::Client do
 
       it do
         expect { subject.json_rpc(:notfound) }.to \
-          raise_error(Peatio::Dash::Client::Error)
+          raise_error(Peatio::Thought::Client::Error)
       end
     end
 
@@ -80,7 +80,7 @@ RSpec.describe Peatio::Dash::Client do
 
       it do
         expect { subject.json_rpc(:connectionerror) }.to \
-          raise_error(Peatio::Dash::Client::ConnectionError)
+          raise_error(Peatio::Thought::Client::ConnectionError)
       end
     end
   end

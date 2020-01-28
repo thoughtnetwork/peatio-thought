@@ -1,31 +1,31 @@
 # frozen_string_literal: true
 
-RSpec.describe Peatio::Dash::Blockchain do
+RSpec.describe Peatio::Thought::Blockchain do
   context :features do
     it "defaults" do
-      blockchain1 = Peatio::Dash::Blockchain.new
-      expect(blockchain1.features).to eq Peatio::Dash::Blockchain::DEFAULT_FEATURES
+      blockchain1 = Peatio::Thought::Blockchain.new
+      expect(blockchain1.features).to eq Peatio::Thought::Blockchain::DEFAULT_FEATURES
     end
 
     it "override defaults" do
-      blockchain2 = Peatio::Dash::Blockchain.new(cash_addr_format: true)
+      blockchain2 = Peatio::Thought::Blockchain.new(cash_addr_format: true)
       expect(blockchain2.features[:cash_addr_format]).to be_truthy
     end
 
     it "custom feautures" do
-      blockchain3 = Peatio::Dash::Blockchain.new(custom_feature: :custom)
-      expect(blockchain3.features.keys).to contain_exactly(*Peatio::Dash::Blockchain::SUPPORTED_FEATURES)
+      blockchain3 = Peatio::Thought::Blockchain.new(custom_feature: :custom)
+      expect(blockchain3.features.keys).to contain_exactly(*Peatio::Thought::Blockchain::SUPPORTED_FEATURES)
     end
   end
 
   context :configure do
-    let(:blockchain) { Peatio::Dash::Blockchain.new }
+    let(:blockchain) { Peatio::Thought::Blockchain.new }
     it "default settings" do
       expect(blockchain.settings).to eq({})
     end
 
     it "currencies and server configuration" do
-      currencies = [{id: :dash,
+      currencies = [{id: :thought,
                       base_factor: 100_000_000,
                       options: {}}]
       settings = {server: "http://admin:admin@127.0.0.1:19998",
@@ -52,7 +52,7 @@ RSpec.describe Peatio::Dash::Blockchain do
     end
 
     let(:blockchain) do
-      Peatio::Dash::Blockchain.new.tap {|b| b.configure(server: server) }
+      Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server) }
     end
 
     before do
@@ -131,23 +131,23 @@ RSpec.describe Peatio::Dash::Blockchain do
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
-          currency_id: :dash},
+          currency_id: :thought},
          {hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
           status: "success",
-          currency_id: :dash}]
+          currency_id: :thought}]
       end
 
       let(:currency) do
-        {id: :dash,
+        {id: :thought,
           base_factor: 100_000_000,
           options: {}}
       end
 
       let(:blockchain) do
-        Peatio::Dash::Blockchain.new.tap {|b| b.configure(currencies: [currency]) }
+        Peatio::Thought::Blockchain.new.tap {|b| b.configure(currencies: [currency]) }
       end
 
       it "builds formatted transactions for passed transaction" do
@@ -157,13 +157,13 @@ RSpec.describe Peatio::Dash::Blockchain do
 
     context "multiple currencies" do
       let(:currency1) do
-        {id: :dash1,
+        {id: :thought1,
           base_factor: 100_000_000,
           options: {}}
       end
 
       let(:currency2) do
-        {id: :dash2,
+        {id: :thought2,
           base_factor: 100_000_000,
           options: {}}
       end
@@ -174,29 +174,29 @@ RSpec.describe Peatio::Dash::Blockchain do
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
-          currency_id: :dash1},
+          currency_id: :thought1},
          {hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
-          currency_id: :dash2},
+          currency_id: :thought2},
          {hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
           status: "success",
-          currency_id: :dash1},
+          currency_id: :thought1},
          {hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
           status: "success",
-          currency_id: :dash2}]
+          currency_id: :thought2}]
       end
 
       let(:blockchain) do
-        Peatio::Dash::Blockchain.new.tap do |b|
+        Peatio::Thought::Blockchain.new.tap do |b|
           b.configure(currencies: [currency1, currency2])
         end
       end
@@ -208,13 +208,13 @@ RSpec.describe Peatio::Dash::Blockchain do
 
     context "single vout transaction" do
       let(:currency) do
-        {id: :dash,
+        {id: :thought,
           base_factor: 100_000_000,
           options: {}}
       end
 
       let(:blockchain) do
-        Peatio::Dash::Blockchain.new.tap {|b| b.configure(currencies: [currency]) }
+        Peatio::Thought::Blockchain.new.tap {|b| b.configure(currencies: [currency]) }
       end
 
       let(:raw_transaction) do
@@ -280,7 +280,7 @@ RSpec.describe Peatio::Dash::Blockchain do
     end
 
     let(:blockchain) do
-      Peatio::Dash::Blockchain.new.tap {|b| b.configure(server: server) }
+      Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server) }
     end
 
     before do
@@ -298,7 +298,7 @@ RSpec.describe Peatio::Dash::Blockchain do
     end
 
     let(:currency) do
-      {id: :dash,
+      {id: :thought,
         base_factor: 100_000_000,
         options: {}}
     end
@@ -306,7 +306,7 @@ RSpec.describe Peatio::Dash::Blockchain do
     let(:server) { "http://admin:admin@127.0.0.1:19998" }
     let(:server_without_authority) { "http://127.0.0.1:19998" }
     let(:blockchain) do
-      Peatio::Dash::Blockchain.new.tap {|b| b.configure(server: server, currencies: [currency]) }
+      Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server, currencies: [currency]) }
     end
 
     subject { blockchain.fetch_block!(117_839) }
@@ -336,7 +336,7 @@ RSpec.describe Peatio::Dash::Blockchain do
     end
 
     let(:blockchain) do
-      Peatio::Dash::Blockchain.new.tap {|b| b.configure(server: server) }
+      Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server) }
     end
 
     before do
@@ -351,7 +351,7 @@ RSpec.describe Peatio::Dash::Blockchain do
       it "requests rpc listaddressgroupings and finds address balance" do
         address = "yXvnaB7Xbwi2kv7BzqktJRghFn3hhUUyvd"
 
-        result = blockchain.load_balance_of_address!(address, :dash)
+        result = blockchain.load_balance_of_address!(address, :thought)
         expect(result).to be_a(BigDecimal)
         expect(result).to eq("132.6129".to_d)
       end
@@ -359,7 +359,7 @@ RSpec.describe Peatio::Dash::Blockchain do
       it "requests rpc listaddressgroupings and finds address with zero balance" do
         address = "yYV5LHb6FVY5qWx7nrfARNVwRyHwLoXcQu"
 
-        result = blockchain.load_balance_of_address!(address, :dash)
+        result = blockchain.load_balance_of_address!(address, :thought)
         expect(result).to be_a(BigDecimal)
         expect(result).to eq("0".to_d)
       end
@@ -368,7 +368,7 @@ RSpec.describe Peatio::Dash::Blockchain do
     context "address is not defined" do
       it "requests rpc listaddressgroupings and do not find address" do
         address = "yY75oNb6FVY5qWx7nrfARNVwRyHwLoXcQu"
-        expect { blockchain.load_balance_of_address!(address, :dash) }
+        expect { blockchain.load_balance_of_address!(address, :thought) }
           .to raise_error(Peatio::Blockchain::UnavailableAddressBalanceError)
       end
     end
@@ -385,7 +385,7 @@ RSpec.describe Peatio::Dash::Blockchain do
       end
 
       it "raise wrapped client error" do
-        expect { blockchain.load_balance_of_address!("anything", :dash) }
+        expect { blockchain.load_balance_of_address!("anything", :thought) }
           .to raise_error(Peatio::Blockchain::ClientError)
       end
     end

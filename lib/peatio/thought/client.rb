@@ -5,7 +5,7 @@ require "faraday"
 require "better-faraday"
 
 module Peatio
-  module Dash
+  module Thought
     class Client
       Error = Class.new(StandardError)
       class ConnectionError < Error; end

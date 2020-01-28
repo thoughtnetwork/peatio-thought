@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Peatio
-  module Dash
+  module Thought
     # TODO: Processing of unconfirmed transactions from mempool isn't supported now.
     class Blockchain < Peatio::Blockchain::Abstract
       DEFAULT_FEATURES = {case_sensitive: true, cash_addr_format: false}.freeze

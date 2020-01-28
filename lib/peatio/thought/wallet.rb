@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module Peatio
-  module Dash
+  module Thought
     class Wallet < Peatio::Wallet::Abstract
       def initialize(settings={})
         @settings = settings
@@ -24,7 +24,7 @@ module Peatio
 
       def create_address!(_options={})
         {address: client.json_rpc(:getnewaddress)}
-      rescue Dash::Client::Error => e
+      rescue Thought::Client::Error => e
         raise Peatio::Wallet::ClientError, e
       end
 
@@ -39,13 +39,13 @@ module Peatio
                                ])
         transaction.hash = txid
         transaction
-      rescue Dash::Client::Error => e
+      rescue Thought::Client::Error => e
         raise Peatio::Wallet::ClientError, e
       end
 
       def load_balance!
         client.json_rpc(:getbalance).to_d
-      rescue Dash::Client::Error => e
+      rescue Thought::Client::Error => e
         raise Peatio::Wallet::ClientError, e
       end
 

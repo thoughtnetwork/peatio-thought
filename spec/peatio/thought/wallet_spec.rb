@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe Peatio::Dash::Wallet do
-  let(:wallet) { Peatio::Dash::Wallet.new }
+RSpec.describe Peatio::Thought::Wallet do
+  let(:wallet) { Peatio::Thought::Wallet.new }
 
   let(:uri) { "http://admin:admin@127.0.0.1:19998" }
   let(:uri_without_authority) { "http://127.0.0.1:19998" }
@@ -10,7 +10,7 @@ RSpec.describe Peatio::Dash::Wallet do
     {
       wallet: {address: "something",
                 uri:     uri},
-      currency: {id: :dash,
+      currency: {id: :thought,
                   base_factor: 100_000_000,
                   options: {}}
     }
@@ -19,7 +19,7 @@ RSpec.describe Peatio::Dash::Wallet do
   before { wallet.configure(settings) }
 
   context :configure do
-    let(:unconfigured_wallet) { Peatio::Dash::Wallet.new }
+    let(:unconfigured_wallet) { Peatio::Thought::Wallet.new }
 
     it "requires wallet" do
       expect { unconfigured_wallet.configure(settings.except(:wallet)) }
@@ -38,7 +38,7 @@ RSpec.describe Peatio::Dash::Wallet do
     it "sets settings attribute" do
       unconfigured_wallet.configure(settings)
       expect(unconfigured_wallet.settings)
-        .to eq(settings.slice(*Peatio::Dash::Wallet::SUPPORTED_SETTINGS))
+        .to eq(settings.slice(*Peatio::Thought::Wallet::SUPPORTED_SETTINGS))
     end
   end
 
