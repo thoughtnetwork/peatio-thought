@@ -264,7 +264,7 @@ RSpec.describe Peatio::Thought::Blockchain do
     let(:server_without_authority) { "http://127.0.0.1:19998" }
 
     let(:getblockhash_response_file) do
-      File.join("spec", "resources", "getblockhash", "117839.json")
+      File.join("spec", "resources", "getblockhash", "602299.json")
     end
 
     let(:getblockhash_response) do
@@ -272,7 +272,7 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     let(:getblock_response_file) do
-      File.join("spec", "resources", "getblock", "117839.json")
+      File.join("spec", "resources", "getblock", "602299.json")
     end
 
     let(:getblock_response) do
