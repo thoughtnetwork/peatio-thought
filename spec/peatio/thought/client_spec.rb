@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 RSpec.describe Peatio::Thought::Client do
-  let(:uri) { "http://admin:admin@127.0.0.1:19998" }
-  let(:uri_without_authority) { "http://127.0.0.1:19998" }
+  let(:uri) { "http://admin:admin@127.0.0.1:10617" }
+  let(:uri_without_authority) { "http://127.0.0.1:10617" }
 
   before(:all) { WebMock.disable_net_connect! }
   after(:all) { WebMock.allow_net_connect! }

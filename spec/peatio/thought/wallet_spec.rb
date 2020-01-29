@@ -3,8 +3,8 @@
 RSpec.describe Peatio::Thought::Wallet do
   let(:wallet) { Peatio::Thought::Wallet.new }
 
-  let(:uri) { "http://admin:admin@127.0.0.1:19998" }
-  let(:uri_without_authority) { "http://127.0.0.1:19998" }
+  let(:uri) { "http://admin:admin@127.0.0.1:10617" }
+  let(:uri_without_authority) { "http://127.0.0.1:10617" }
 
   let(:settings) do
     {

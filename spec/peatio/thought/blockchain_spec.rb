@@ -28,7 +28,7 @@ RSpec.describe Peatio::Thought::Blockchain do
       currencies = [{id: :thought,
                       base_factor: 100_000_000,
                       options: {}}]
-      settings = {server: "http://admin:admin@127.0.0.1:19998",
+      settings = {server: "http://admin:admin@127.0.0.1:10617",
                    currencies: currencies,
                    something: :custom}
       blockchain.configure(settings)
@@ -40,8 +40,8 @@ RSpec.describe Peatio::Thought::Blockchain do
     before(:all) { WebMock.disable_net_connect! }
     after(:all)  { WebMock.allow_net_connect! }
 
-    let(:server) { "http://admin:admin@127.0.0.1:19998" }
-    let(:server_without_authority) { "http://127.0.0.1:19998" }
+    let(:server) { "http://admin:admin@127.0.0.1:10617" }
+    let(:server_without_authority) { "http://127.0.0.1:10617" }
 
     let(:response) do
       JSON.parse(File.read(response_file))
@@ -68,7 +68,7 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     it "raises error if there is error in response body" do
-      stub_request(:post, "http://127.0.0.1:19998")
+      stub_request(:post, "http://127.0.0.1:10617")
         .with(body: {jsonrpc: "1.0",
                       method: :getblockcount,
                       params:  []}.to_json)
@@ -260,8 +260,8 @@ RSpec.describe Peatio::Thought::Blockchain do
     before(:all) { WebMock.disable_net_connect! }
     after(:all)  { WebMock.allow_net_connect! }
 
-    let(:server) { "http://admin:admin@127.0.0.1:19998" }
-    let(:server_without_authority) { "http://127.0.0.1:19998" }
+    let(:server) { "http://admin:admin@127.0.0.1:10617" }
+    let(:server_without_authority) { "http://127.0.0.1:10617" }
 
     let(:getblockhash_response_file) do
       File.join("spec", "resources", "getblockhash", "602299.json")
@@ -303,8 +303,8 @@ RSpec.describe Peatio::Thought::Blockchain do
         options: {}}
     end
 
-    let(:server) { "http://admin:admin@127.0.0.1:19998" }
-    let(:server_without_authority) { "http://127.0.0.1:19998" }
+    let(:server) { "http://admin:admin@127.0.0.1:10617" }
+    let(:server_without_authority) { "http://127.0.0.1:10617" }
     let(:blockchain) do
       Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server, currencies: [currency]) }
     end
@@ -324,8 +324,8 @@ RSpec.describe Peatio::Thought::Blockchain do
     before(:all) { WebMock.disable_net_connect! }
     after(:all)  { WebMock.allow_net_connect! }
 
-    let(:server) { "http://admin:admin@127.0.0.1:19998" }
-    let(:server_without_authority) { "http://127.0.0.1:19998" }
+    let(:server) { "http://admin:admin@127.0.0.1:10617" }
+    let(:server_without_authority) { "http://127.0.0.1:10617" }
 
     let(:response) do
       JSON.parse(File.read(response_file))
@@ -375,7 +375,7 @@ RSpec.describe Peatio::Thought::Blockchain do
 
     context "client error is raised" do
       before do
-        stub_request(:post, "http://127.0.0.1:19998")
+        stub_request(:post, "http://127.0.0.1:10617")
           .with(body: {jsonrpc: "1.0",
                         method: :listaddressgroupings,
                         params: []}.to_json)
