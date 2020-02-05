@@ -349,7 +349,7 @@ RSpec.describe Peatio::Thought::Blockchain do
 
     context "address with balance is defined" do
       it "requests rpc listaddressgroupings and finds address balance" do
-        address = "yXvnaB7Xbwi2kv7BzqktJRghFn3hhUUyvd"
+        address = "3v1VnMT6in6C1pAe1DaHGWrAByHacXPnCn"
 
         result = blockchain.load_balance_of_address!(address, :thought)
         expect(result).to be_a(BigDecimal)
@@ -357,7 +357,7 @@ RSpec.describe Peatio::Thought::Blockchain do
       end
 
       it "requests rpc listaddressgroupings and finds address with zero balance" do
-        address = "yYV5LHb6FVY5qWx7nrfARNVwRyHwLoXcQu"
+        address = "3xGfHJZtZJroGkTPwckFW2mEhTn4EGXk4u"
 
         result = blockchain.load_balance_of_address!(address, :thought)
         expect(result).to be_a(BigDecimal)
