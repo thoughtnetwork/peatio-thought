@@ -66,7 +66,7 @@ RSpec.describe Peatio::Thought::Wallet do
 
     it "request rpc and creates new address" do
       result = wallet.create_address!(uid: "UID123")
-      expect(result.symbolize_keys).to eq(address: "yiApaDUZZfLyvU2N33ysJm8MV9TsVU9K4t")
+      expect(result.symbolize_keys).to eq(address: "3r67tQGzrtiWMgXt3X5xm4wSFh2gwGStvz")
     end
   end
 
@@ -104,7 +104,7 @@ RSpec.describe Peatio::Thought::Wallet do
       result = wallet.create_transaction!(transaction)
       expect(result.amount).to eq(49.99)
       expect(result.to_address).to eq("yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL")
-      expect(result.hash).to eq("5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc")
+      expect(result.hash).to eq("842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c")
     end
   end
 

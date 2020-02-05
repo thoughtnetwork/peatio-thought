@@ -64,7 +64,7 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     it "returns latest block number" do
-      expect(blockchain.latest_block_number).to eq(117_839)
+      expect(blockchain.latest_block_number).to eq(602_299)
     end
 
     it "raises error if there is error in response body" do
@@ -82,7 +82,7 @@ RSpec.describe Peatio::Thought::Blockchain do
 
   context :build_transaction do
     let(:raw_transaction) do
-      {"txid" => "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+      {"txid" => "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
        "hash" => "0000000009cf73e61250f02ccc5edcce5ba935bbc73a88d6e9f96fdec5fda623",
        "version" => 2,
        "size" => 225,
@@ -126,13 +126,13 @@ RSpec.describe Peatio::Thought::Blockchain do
 
     context "three vout tx" do
       let(:expected_transactions) do
-        [{hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+        [{hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
           currency_id: :thought},
-         {hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+         {hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
@@ -169,25 +169,25 @@ RSpec.describe Peatio::Thought::Blockchain do
       end
 
       let(:expected_transactions) do
-        [{hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+        [{hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
           currency_id: :thought1},
-         {hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+         {hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
           currency_id: :thought2},
-         {hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+         {hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
           status: "success",
           currency_id: :thought1},
-         {hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+         {hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
@@ -218,7 +218,7 @@ RSpec.describe Peatio::Thought::Blockchain do
       end
 
       let(:raw_transaction) do
-        {"txid" => "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+        {"txid" => "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
           "version" => 2,
           "size" => 225,
          "type" => 0,
@@ -242,7 +242,7 @@ RSpec.describe Peatio::Thought::Blockchain do
       end
 
       let(:expected_transactions) do
-        [{hash: "5809bc3d1f0c72f318a28d1dc16fa268b7ec6405c64acf1e7af8f2c483a7cafc",
+        [{hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: "49.99".to_d,
@@ -287,13 +287,13 @@ RSpec.describe Peatio::Thought::Blockchain do
       stub_request(:post, server_without_authority)
         .with(body: {jsonrpc: "1.0",
                       method: :getblockhash,
-                      params:  [117_839]}.to_json)
+                      params:  [602_299]}.to_json)
         .to_return(body: getblockhash_response.to_json)
 
       stub_request(:post, server_without_authority)
         .with(body: {jsonrpc: "1.0",
                       method: :getblock,
-                      params:  ["00000000092ee5efab606de53556055e74902d9ed0b71a788366006ef5603d7f", 2]}.to_json)
+                      params:  ["0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984", 2]}.to_json)
         .to_return(body: getblock_response.to_json)
     end
 
@@ -309,7 +309,7 @@ RSpec.describe Peatio::Thought::Blockchain do
       Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server, currencies: [currency]) }
     end
 
-    subject { blockchain.fetch_block!(117_839) }
+    subject { blockchain.fetch_block!(602_299) }
 
     it "builds expected number of transactions" do
       expect(subject.count).to eq(4)

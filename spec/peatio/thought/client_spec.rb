@@ -32,7 +32,7 @@ RSpec.describe Peatio::Thought::Client do
       end
 
       it { expect { subject.json_rpc(:getblockcount) }.not_to raise_error }
-      it { expect(subject.json_rpc(:getblockcount)).to eq(117_839) }
+      it { expect(subject.json_rpc(:getblockcount)).to eq(602_299) }
     end
 
     context :methodnotfound do
