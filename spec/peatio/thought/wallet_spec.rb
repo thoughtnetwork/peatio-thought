@@ -97,14 +97,14 @@ RSpec.describe Peatio::Thought::Wallet do
     end
 
     let(:transaction) do
-      Peatio::Transaction.new(amount: 49.99, to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL")
+      Peatio::Transaction.new(amount: 134.22200000, to_address: "3pqX1YkaxHKdD8pX2DR6j6vpXKq9dZWLxp")
     end
 
     it "requests rpc and sends transaction without subtract fees" do
       result = wallet.create_transaction!(transaction)
-      expect(result.amount).to eq(49.99)
-      expect(result.to_address).to eq("yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL")
-      expect(result.hash).to eq("842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c")
+      expect(result.amount).to eq(134.22200000)
+      expect(result.to_address).to eq("3pqX1YkaxHKdD8pX2DR6j6vpXKq9dZWLxp")
+      expect(result.hash).to eq("0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984")
     end
   end
 

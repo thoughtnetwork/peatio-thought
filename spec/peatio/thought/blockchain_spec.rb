@@ -82,7 +82,7 @@ RSpec.describe Peatio::Thought::Blockchain do
 
   context :build_transaction do
     let(:raw_transaction) do
-      {"txid" => "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+      {"txid" => "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
        "hash" => "0000000009cf73e61250f02ccc5edcce5ba935bbc73a88d6e9f96fdec5fda623",
        "version" => 2,
        "size" => 225,
@@ -126,13 +126,13 @@ RSpec.describe Peatio::Thought::Blockchain do
 
     context "three vout tx" do
       let(:expected_transactions) do
-        [{hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+        [{hash: "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
           currency_id: :thought},
-         {hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+         {hash: "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
@@ -169,25 +169,25 @@ RSpec.describe Peatio::Thought::Blockchain do
       end
 
       let(:expected_transactions) do
-        [{hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+        [{hash: "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
           currency_id: :thought1},
-         {hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+         {hash: "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: 0.4999e2,
           status: "success",
           currency_id: :thought2},
-         {hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+         {hash: "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
           status: "success",
           currency_id: :thought1},
-         {hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+         {hash: "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
           txout: 1,
           to_address: "yXLb4nGyxE6k5D2HZ6LE3T1kgpjiYSnLFr",
           amount: 0.7454849774e2,
@@ -218,7 +218,7 @@ RSpec.describe Peatio::Thought::Blockchain do
       end
 
       let(:raw_transaction) do
-        {"txid" => "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+        {"txid" => "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
           "version" => 2,
           "size" => 225,
          "type" => 0,
@@ -242,7 +242,7 @@ RSpec.describe Peatio::Thought::Blockchain do
       end
 
       let(:expected_transactions) do
-        [{hash: "842077e05b8e55119079753834c2b8f490ec0fab9142e8330e31192b4436a10c",
+        [{hash: "0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984",
           txout: 0,
           to_address: "yWdXnYxGbouNoo8yMvcbZmZ3Gdp6BpySxL",
           amount: "49.99".to_d,
@@ -353,7 +353,7 @@ RSpec.describe Peatio::Thought::Blockchain do
 
         result = blockchain.load_balance_of_address!(address, :thought)
         expect(result).to be_a(BigDecimal)
-        expect(result).to eq("132.6129".to_d)
+        expect(result).to eq("74.54849774".to_d)
       end
 
       it "requests rpc listaddressgroupings and finds address with zero balance" do
