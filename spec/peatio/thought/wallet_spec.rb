@@ -104,7 +104,7 @@ RSpec.describe Peatio::Thought::Wallet do
       result = wallet.create_transaction!(transaction)
       expect(result.amount).to eq(134.22200000)
       expect(result.to_address).to eq("3pqX1YkaxHKdD8pX2DR6j6vpXKq9dZWLxp")
-      expect(result.hash).to eq("0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984")
+      expect(result.hash).to eq("ab5a181080ad50979933bc59bcb2c5c87b12b67529b250c9812c0d9a056891cf")
     end
   end
 

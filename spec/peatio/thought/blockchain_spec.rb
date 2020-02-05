@@ -129,13 +129,13 @@ RSpec.describe Peatio::Thought::Blockchain do
         [{hash: "ab5a181080ad50979933bc59bcb2c5c87b12b67529b250c9812c0d9a056891cf",
           txout: 0,
           to_address: "3pqX1YkaxHKdD8pX2DR6j6vpXKq9dZWLxp",
-          amount: 0.13422200e2,
+          amount: 134.22200,
           status: "success",
           currency_id: :thought},
          {hash: "ab5a181080ad50979933bc59bcb2c5c87b12b67529b250c9812c0d9a056891cf",
           txout: 1,
           to_address: "3v1VnMT6in6C1pAe1DaHGWrAByHacXPnCn",
-          amount: 0.7454849774e2,
+          amount: 74.54849774,
           status: "success",
           currency_id: :thought}]
       end
@@ -172,25 +172,25 @@ RSpec.describe Peatio::Thought::Blockchain do
         [{hash: "ab5a181080ad50979933bc59bcb2c5c87b12b67529b250c9812c0d9a056891cf",
           txout: 0,
           to_address: "3pqX1YkaxHKdD8pX2DR6j6vpXKq9dZWLxp",
-          amount: 0.13422200e2,
+          amount: 134.22200,
           status: "success",
           currency_id: :thought1},
          {hash: "ab5a181080ad50979933bc59bcb2c5c87b12b67529b250c9812c0d9a056891cf",
           txout: 0,
           to_address: "3pqX1YkaxHKdD8pX2DR6j6vpXKq9dZWLxp",
-          amount: 0.13422200e2,
+          amount: 134.22200,
           status: "success",
           currency_id: :thought2},
          {hash: "ab5a181080ad50979933bc59bcb2c5c87b12b67529b250c9812c0d9a056891cf",
           txout: 1,
           to_address: "3v1VnMT6in6C1pAe1DaHGWrAByHacXPnCn",
-          amount: 0.7454849774e2,
+          amount: 74.54849774,
           status: "success",
           currency_id: :thought1},
          {hash: "ab5a181080ad50979933bc59bcb2c5c87b12b67529b250c9812c0d9a056891cf",
           txout: 1,
           to_address: "3v1VnMT6in6C1pAe1DaHGWrAByHacXPnCn",
-          amount: 0.7454849774e2,
+          amount: 74.54849774,
           status: "success",
           currency_id: :thought2}]
       end
@@ -312,7 +312,7 @@ RSpec.describe Peatio::Thought::Blockchain do
     subject { blockchain.fetch_block!(602_299) }
 
     it "builds expected number of transactions" do
-      expect(subject.count).to eq(4)
+      expect(subject.count).to eq(2)
     end
 
     it "all transactions are valid" do
@@ -367,7 +367,7 @@ RSpec.describe Peatio::Thought::Blockchain do
 
     context "address is not defined" do
       it "requests rpc listaddressgroupings and do not find address" do
-        address = "yY75oNb6FVY5qWx7nrfARNVwRyHwLoXcQu"
+        address = "3YY5oNb6FVY5qWx7nrfARNVwRyHwLoXcQu"
         expect { blockchain.load_balance_of_address!(address, :thought) }
           .to raise_error(Peatio::Blockchain::UnavailableAddressBalanceError)
       end
