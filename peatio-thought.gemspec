@@ -7,21 +7,21 @@ require "peatio/thought/version"
 Gem::Specification.new do |spec|
   spec.name          = "peatio-thought"
   spec.version       = Peatio::Thought::VERSION
-  spec.authors       = ["MoD"]
-  spec.email         = ["mod@websys.io"]
+  spec.authors       = ["Andrew@Thought"]
+  spec.email         = ["andrew@thought.live"]
 
-  spec.summary       = "Peatio Blockchain Plugin"
-  spec.description   = "Peatio Blockchain Plugin for Rubykube"
-  spec.homepage      = "https://www.openware.com"
-  spec.license       = "Proprietary"
+  spec.summary       = "Peatio Thought Blockchain Plugin"
+  spec.description   = "Peatio Thought Blockchain Plugin for Rubykube"
+  spec.homepage      = "https://thought.live"
+  spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
 
     spec.metadata["homepage_uri"] = spec.homepage
-    spec.metadata["source_code_uri"] = "https://github.com/openware/peatio-contrib"
-    spec.metadata["changelog_uri"] = "https://github.com/openware/peatio-contrib/blob/master/CHANGELOG.md"
+    spec.metadata["source_code_uri"] = "https://github.com/thoughtnetwork/peatio-thought"
+    spec.metadata["changelog_uri"] = "https://github.com/thoughtnetwork/peatio-thought/blob/master/CHANGELOG.md"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
