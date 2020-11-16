@@ -26,12 +26,11 @@ module Peatio
             Peatio::Transaction.new(ntx.merge(block_number: block_number))
           end
           txs_array.append(*txs)
-        end
+        end.yield_self { |txs_array| Peatio::Block.new(block_number, txs_array) }
+    rescue Client::Error => e
+      raise Peatio::Blockchain::ClientError, e
+    end
 
-        Peatio::Block.new(block_number, block_txs)
-      rescue Client::Error => e
-        raise Peatio::Blockchain::ClientError, e
-      end
 
       def latest_block_number
         client.json_rpc(:getblockcount)
@@ -44,32 +43,32 @@ module Peatio
                                      .flatten(1)
                                      .find {|addr| addr[0] == address }
 
-        raise Peatio::Blockchain::UnavailableAddressBalanceError, address if address_with_balance.blank?
-
-        address_with_balance[1].to_d
-      rescue Client::Error => e
-        raise Peatio::Blockchain::ClientError, e
+      if address_with_balance.blank?
+        raise Peatio::Blockchain::UnavailableAddressBalanceError, address
       end
 
-      private
+      address_with_balance[1].to_d
+    rescue Client::Error => e
+      raise Peatio::Blockchain::ClientError, e
+    end
+
+private
 
       def filter_vout(tx_hash)
         tx_hash.fetch("vout").select do |entry|
           entry.fetch("value").to_d.positive? && entry["scriptPubKey"].has_key?("addresses")
         end
-      end
+        .each_with_object([]) do |entry, formatted_txs|
+          no_currency_tx =
+            { hash: tx_hash['txid'], txout: entry['n'],
+              to_address: entry['scriptPubKey']['addresses'][0],
+              amount: entry.fetch('value').to_d,
+              status: 'success' }
 
-      def build_transaction(tx_hash)
-        filter_vout(tx_hash).each_with_object([]) do |entry, formatted_txs|
-          no_currency_tx = {hash: tx_hash["txid"], txout: entry["n"],
-                            to_address: entry["scriptPubKey"]["addresses"][0],
-                            amount: entry.fetch("value").to_d,
-                            status: "success"}
-
-          # Build transaction for each currency belonging to blockchain.
-          settings_fetch(:currencies).pluck(:id).each do |currency_id|
-            formatted_txs << no_currency_tx.merge(currency_id: currency_id)
-          end
+            # Build transaction for each currency belonging to blockchain.
+            settings_fetch(:currencies).pluck(:id).each do |currency_id|
+              formatted_txs << no_currency_tx.merge(currency_id: currency_id)
+            end
         end
       end
 
@@ -77,9 +76,8 @@ module Peatio
         @client ||= Client.new(settings_fetch(:server))
       end
 
-      def settings_fetch(key)
-        @settings.fetch(key) { raise Peatio::Blockchain::MissingSettingError, key.to_s }
-      end
+    def settings_fetch(key)
+      @settings.fetch(key) { raise Peatio::Blockchain::MissingSettingError, key.to_s }
     end
   end
 end
