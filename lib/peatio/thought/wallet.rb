@@ -60,3 +60,4 @@ module Peatio
     end
   end
 end
+end

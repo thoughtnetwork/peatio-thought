@@ -8,7 +8,8 @@ module Peatio
   module Thought
     class Client
       Error = Class.new(StandardError)
-      class ConnectionError = Error;end
+
+      class ConnectionError < Error; end
 
       class ResponseError < Error
         def initialize(code, msg)
@@ -51,4 +52,5 @@ module Peatio
       end
     end
   end
+end
 end

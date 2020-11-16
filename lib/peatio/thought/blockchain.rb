@@ -80,4 +80,6 @@ private
       @settings.fetch(key) { raise Peatio::Blockchain::MissingSettingError, key.to_s }
     end
   end
+ end
 end
+
