@@ -25,7 +25,9 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     it "currencies and server configuration" do
-      currencies = Currency.where(type: :coin).first(2).map(&:to_blockchain_api_settings)
+      currencies = [{id: :thought,
+                      base_factor: 100_000_000,
+                      options: {}}]
       settings = {server: "http://admin:admin@127.0.0.1:10617",
                    currencies: currencies,
                    something: :custom}
@@ -35,18 +37,11 @@ RSpec.describe Peatio::Thought::Blockchain do
   end
 
   context :latest_block_number do
-    around do |example|
-      WebMock.disable_net_connect!
-      example.run
-      WebMock.allow_net_connect!
-    end
+    before(:all) { WebMock.disable_net_connect! }
+    after(:all)  { WebMock.allow_net_connect! }
 
     let(:server) { "http://admin:admin@127.0.0.1:10617" }
-    let(:endpoint) { "127.0.0.1:10617" }
-    let(:blockchain) do
-      Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server) }
-    end
-
+    let(:server_without_authority) { "http://127.0.0.1:10617" }
 
     let(:response) do
       JSON.parse(File.read(response_file))
@@ -56,111 +51,34 @@ RSpec.describe Peatio::Thought::Blockchain do
       File.join("spec", "resources", "getblockcount", "response.json")
     end
 
-    it 'returns latest block number' do
-    block_number = 602299
+    let(:blockchain) do
+      Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server) }
+    end
 
-    stub_request(:post, endpoint)
-      .with(body: { jsonrpc: '1.0',
-                    method: :getblockcount,
-                    params:  [] }.to_json)
-      .to_return(body: { result: block_number,
-                         error:  nil,
-                         id:     nil }.to_json)
+    before do
+      stub_request(:post, server_without_authority)
+        .with(body: {jsonrpc: "1.0",
+                      method: :getblockcount,
+                      params:  []}.to_json)
+        .to_return(body: response.to_json)
+    end
 
-    expect(blockchain.latest_block_number).to eq(block_number)
-  end
+    it "returns latest block number" do
+      expect(blockchain.latest_block_number).to eq(602_299)
+    end
 
-      it "raises error if there is error in response body" do
-      stub_request(:post, endpoint)
+    it "raises error if there is error in response body" do
+      stub_request(:post, "http://127.0.0.1:10617")
         .with(body: {jsonrpc: "1.0",
                       method: :getblockcount,
                       params:  []}.to_json)
         .to_return(body: {result: nil,
-                           error:  {code: -32601, message: "Method not found"},
+                           error:  {code: -32_601, message: "Method not found"},
                            id:     nil}.to_json)
 
       expect { blockchain.latest_block_number }.to raise_error(Peatio::Blockchain::ClientError)
     end
-
-    it 'keeps alive' do
-        stub_request(:post, endpoint)
-            .to_return(body: { result: 602299,
-                               error:  nil,
-                               id:     nil }.to_json)
-            .with(headers: { 'Connection': 'keep-alive',
-                             'Keep-Alive': '30' })
-
-        blockchain.latest_block_number
-      end
-    end
-
-    context :fetch_block! do
-      around do |example|
-        WebMock.disable_net_connect!
-        example.run
-        WebMock.allow_net_connect!
-      end
-
-      let(:block_file_name) { 602299.json' }
-      let(:block_data) do
-        Rails.root.join('spec', 'resources', 'thought', block_file_name)
-          .yield_self { |file_path| File.open(file_path) }
-          .yield_self { |file| JSON.load(file) }
-      end
-
-      let(:start_block)   { block_data.first['result']['height'] }
-      let(:latest_block)  { block_data.last['result']['height'] }
-
-      def request_block_hash_body(block_height)
-        { jsonrpc: '1.0',
-          method: :getblockhash,
-          params:  [block_height]
-        }.to_json
-      end
-
-      def request_block_body(block_hash)
-        { jsonrpc: '1.0',
-          method:  :getblock,
-          params:  [block_hash, 2]
-        }.to_json
-      end
-
-      before do
-        block_data.each do |blk|
-          # stub get_block_hash
-          stub_request(:post, endpoint)
-            .with(body: request_block_hash_body(blk['result']['height']))
-            .to_return(body: {result: blk['result']['hash']}.to_json)
-
-          # stub get_block
-          stub_request(:post, endpoint)
-            .with(body: request_block_body(blk['result']['hash']))
-            .to_return(body: blk.to_json)
-        end
-      end
-
-      let(:currency) do
-        Currency.find_by(id: :btc)
-      end
-
-      let(:server) { 'http://user:password@127.0.0.1:10617' }
-      let(:endpoint) { 'http://127.0.0.1:10617' }
-      let(:blockchain) do
-        Peatio::Thought::Blockchain.new.tap { |b| b.configure(server: server, currencies: [currency]) }
-      end
-
-      context 'first block' do
-        subject { blockchain.fetch_block!(start_block) }
-
-        it 'builds expected number of transactions' do
-          expect(subject.count).to eq(1)
-        end
-
-        it 'all transactions are valid' do
-          expect(subject.all?(&:valid?)).to be_truthy
-        end
-      end
-    end
+  end
 
   context :build_transaction do
     let(:raw_transaction) do
@@ -223,11 +141,13 @@ RSpec.describe Peatio::Thought::Blockchain do
       end
 
       let(:currency) do
-          Currency.find_by(id: :tht)
+        {id: :thought,
+          base_factor: 100_000_000,
+          options: {}}
       end
 
       let(:blockchain) do
-        Peatio::Thought::Blockchain.new.tap {|b| b.configure(currencies: [currency.to_blockchain_api_settings]) }
+        Peatio::Thought::Blockchain.new.tap {|b| b.configure(currencies: [currency]) }
       end
 
       it "builds formatted transactions for passed transaction" do
@@ -236,11 +156,16 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     context "multiple currencies" do
-      Currency.find_by(id: :tht)
+      let(:currency1) do
+        {id: :thought1,
+          base_factor: 100_000_000,
+          options: {}}
       end
 
       let(:currency2) do
-        Currency.find_by(id: :tht)
+        {id: :thought2,
+          base_factor: 100_000_000,
+          options: {}}
       end
 
       let(:expected_transactions) do
@@ -272,7 +197,7 @@ RSpec.describe Peatio::Thought::Blockchain do
 
       let(:blockchain) do
         Peatio::Thought::Blockchain.new.tap do |b|
-          b.configure(currencies: [currency1.to_blockchain_api_settings, currency2.to_blockchain_api_settings])
+          b.configure(currencies: [currency1, currency2])
         end
       end
 
@@ -282,11 +207,14 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     context "single vout transaction" do
-      Currency.find_by(id: :tht)
+      let(:currency) do
+        {id: :thought,
+          base_factor: 100_000_000,
+          options: {}}
       end
 
       let(:blockchain) do
-        Peatio::Thought::Blockchain.new.tap {|b| b.configure(currencies: [currency.to_blockchain_api_settings]) }
+        Peatio::Thought::Blockchain.new.tap {|b| b.configure(currencies: [currency]) }
       end
 
       let(:raw_transaction) do
@@ -329,14 +257,11 @@ RSpec.describe Peatio::Thought::Blockchain do
   end
 
   context :fetch_block! do
-    around do |example|
-      WebMock.disable_net_connect!
-      example.run
-      WebMock.allow_net_connect!
-    end
+    before(:all) { WebMock.disable_net_connect! }
+    after(:all)  { WebMock.allow_net_connect! }
 
     let(:server) { "http://admin:admin@127.0.0.1:10617" }
-    let(:endpoint) { "http://127.0.0.1:10617" }
+    let(:server_without_authority) { "http://127.0.0.1:10617" }
 
     let(:getblockhash_response_file) do
       File.join("spec", "resources", "getblockhash", "602299.json")
@@ -359,13 +284,13 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     before do
-      stub_request(:post, endpoint)
+      stub_request(:post, server_without_authority)
         .with(body: {jsonrpc: "1.0",
                       method: :getblockhash,
                       params:  [602_299]}.to_json)
         .to_return(body: getblockhash_response.to_json)
 
-      stub_request(:post, endpoint)
+      stub_request(:post, server_without_authority)
         .with(body: {jsonrpc: "1.0",
                       method: :getblock,
                       params:  ["0004927e5dc70f861df8f38be99f8d307e9604dac32e7bda1e5a4e4288756984", 2]}.to_json)
@@ -379,7 +304,7 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     let(:server) { "http://admin:admin@127.0.0.1:10617" }
-    let(:endpoint) { "http://127.0.0.1:10617" }
+    let(:server_without_authority) { "http://127.0.0.1:10617" }
     let(:blockchain) do
       Peatio::Thought::Blockchain.new.tap {|b| b.configure(server: server, currencies: [currency]) }
     end
@@ -400,7 +325,7 @@ RSpec.describe Peatio::Thought::Blockchain do
     after(:all)  { WebMock.allow_net_connect! }
 
     let(:server) { "http://admin:admin@127.0.0.1:10617" }
-    let(:endpoint) { "http://127.0.0.1:10617" }
+    let(:server_without_authority) { "http://127.0.0.1:10617" }
 
     let(:response) do
       JSON.parse(File.read(response_file))
@@ -415,7 +340,7 @@ RSpec.describe Peatio::Thought::Blockchain do
     end
 
     before do
-      stub_request(:post, endpoint)
+      stub_request(:post, server_without_authority)
         .with(body: {jsonrpc: "1.0",
                       method: :listaddressgroupings,
                       params:  []}.to_json)
