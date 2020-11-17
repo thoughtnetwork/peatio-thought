@@ -18,7 +18,7 @@ module Peatio
 
         @wallet = @settings.fetch(:wallet) do
           raise Peatio::Wallet::MissingSettingError, :wallet
-        }.slice(:uri, :address)
+        end.slice(:uri, :address)
 
         @currency = @settings.fetch(:currency) do
           raise Peatio::Wallet::MissingSettingError, :currency
