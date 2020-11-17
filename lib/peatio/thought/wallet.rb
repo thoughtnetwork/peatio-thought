@@ -16,17 +16,17 @@ module Peatio
 
         @settings.merge!(settings.slice(*SUPPORTED_SETTINGS))
 
-        @wallet = @settings.fetch(:wallet) {
+        @wallet = @settings.fetch(:wallet) do
           raise Peatio::Wallet::MissingSettingError, :wallet
         }.slice(:uri, :address)
 
-        @currency = @settings.fetch(:currency) {
+        @currency = @settings.fetch(:currency) do
           raise Peatio::Wallet::MissingSettingError, :currency
-        }.slice(:id, :base_factor, :options)
+        end.slice(:id, :base_factor, :options)
       end
 
-      def create_address!(_options={})
-        {address: client.json_rpc(:getnewaddress)}
+      def create_address!(_options = {})
+        { address: client.json_rpc(:getnewaddress) }
       rescue Thought::Client::Error => e
         raise Peatio::Wallet::ClientError, e
       end
@@ -36,9 +36,9 @@ module Peatio
                                [
                                  transaction.to_address,
                                  transaction.amount,
-                                 "",
-                                 "",
-                                 options[:subtract_fee].to_s == "true" # subtract fee from transaction amount.
+                                 '',
+                                 '',
+                                 options[:subtract_fee].to_s == 'true' # subtract fee from transaction amount.
                                ])
         transaction.hash = txid
         transaction
@@ -54,10 +54,11 @@ module Peatio
 
       private
 
-    def client
-      uri = @wallet.fetch(:uri) { raise Peatio::Wallet::MissingSettingError, :uri }
-      @client ||= Client.new(uri, idle_timeout: 1)
+      def client
+        uri = @wallet.fetch(:uri) { raise Peatio::Wallet::MissingSettingError, :uri }
+        @client ||= Client.new(uri)
+      end
     end
   end
 end
-end
+

@@ -8,46 +8,52 @@ module Peatio
   module Thought
     class Client
       Error = Class.new(StandardError)
-
-      class ConnectionError < Error; end
+      ConnectionError = Class.new(Error)
 
       class ResponseError < Error
         def initialize(code, msg)
-          super "#{msg} (#{code})"
+          @code = code
+          @msg = msg
+        end
+
+        def message
+          "#{@msg} (#{@code})"
+        end
       end
-    end
+  
 
       extend Memoist
 
-      def initialize(endpoint, idle_timeout: 5)
-      @json_rpc_endpoint = URI.parse(endpoint)
-      @idle_timeout = idle_timeout
-    end
+      def initialize(endpoint)
+        @json_rpc_endpoint = URI.parse(endpoint)
+      end
 
-    def json_rpc(method, params = [])
-      response = connection.post \
-        '/',
-        {jsonrpc: '1.0', method: method, params: params}.to_json,
-        {'Accept' => 'application/json',
-         'Content-Type' => 'application/json'}
-      response.assert_success!
-      response = JSON.parse(response.body)
-      response['error'].tap { |error| raise ResponseError.new(error['code'], error['message']) if error }
-      response.fetch('result')
-    rescue Faraday::Error => e
-      raise ConnectionError, e
-    rescue StandardError => e
-      raise Error, e
-    end
+      def json_rpc(method, params = [])
+        response = connection.post \
+          '/',
+          { jsonrpc: '1.0', method: method, params: params }.to_json,
+          { 'Accept' => 'application/json',
+            'Content-Type' => 'application/json' }
+        response.assert_2xx!
+        response = JSON.parse(response.body)
+        response['error'].tap do |e|
+          raise ResponseError.new(e['code'], e['message']) if e
+        end
+        response.fetch('result')
+      rescue Faraday::Error => e
+        raise ConnectionError, e
+      end
 
     private
 
-    def connection
-      @connection ||= Faraday.new(@json_rpc_endpoint) do |f|
-        f.adapter :net_http_persistent, pool_size: 5, idle_timeout: @idle_timeout
-      end.tap do |connection|
-        unless @json_rpc_endpoint.user.blank?
-          connection.basic_auth(@json_rpc_endpoint.user, @json_rpc_endpoint.password)
+      def connection
+        @connection ||= Faraday.new(@json_rpc_endpoint) do |f|
+                          f.adapter :net_http_persistent, pool_size: 5
+                        end.tap do |connection|
+          unless @json_rpc_endpoint.user.blank?
+            connection.basic_auth(@json_rpc_endpoint.user,
+                                  @json_rpc_endpoint.password)
+          end
         end
       end
     end
