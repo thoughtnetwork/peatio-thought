@@ -1,64 +1,56 @@
 # frozen_string_literal: true
 
-require "memoist"
-require "faraday"
-require "better-faraday"
+require 'memoist'
+require 'faraday'
+require 'better-faraday'
 
 module Peatio
-  module Dash
+  module Thought
     class Client
-      Error = Class.new(StandardError)
-      ConnectionError = Class.new(Error)
+	Error = Class.new(StandardError)
 
-      class ResponseError < Error
-        def initialize(code, msg)
-          @code = code
-          @msg = msg
-        end
+    class ConnectionError < Error; end
 
-        def message
-          "#{@msg} (#{@code})"
-        end
+    class ResponseError < Error
+      def initialize(code, msg)
+        super "#{msg} (#{code})"
       end
+    end
 
-      extend Memoist
+    extend Memoist
 
-      def initialize(endpoint)
-        @json_rpc_endpoint = URI.parse(endpoint)
-      end
+    def initialize(endpoint, idle_timeout: 5)
+      @json_rpc_endpoint = URI.parse(endpoint)
+      @idle_timeout = idle_timeout
+    end
 
-      def json_rpc(method, params=[])
-        response = post(method, params)
+    def json_rpc(method, params = [])
+      response = connection.post \
+        '/',
+        {jsonrpc: '1.0', method: method, params: params}.to_json,
+        {'Accept' => 'application/json',
+         'Content-Type' => 'application/json'}
+      response.assert_success!
+      response = JSON.parse(response.body)
+      response['error'].tap { |error| raise ResponseError.new(error['code'], error['message']) if error }
+      response.fetch('result')
+    rescue Faraday::Error => e
+      raise ConnectionError, e
+    rescue StandardError => e
+      raise Error, e
+    end
 
-        response.assert_2xx!
-        response = JSON.parse(response.body)
+    private
 
-        response["error"].tap do |e|
-          raise ResponseError.new(e["code"], e["message"]) if e
-        end
-
-        response.fetch("result")
-      rescue Faraday::Error => e
-        raise ConnectionError, e
-      end
-
-      private
-
-      def post(method, params)
-        connection.post("/", {jsonrpc: "1.0", method: method, params: params}.to_json,
-                        "Accept" => "application/json", "Content-Type" => "application/json")
-      end
-
-      def connection
-        @connection ||= Faraday.new(@json_rpc_endpoint) do |f|
-          f.adapter :net_http_persistent, pool_size: 5
-        end.tap do |connection|
-          unless @json_rpc_endpoint.user.blank?
-            connection.basic_auth(@json_rpc_endpoint.user,
-                                  @json_rpc_endpoint.password)
-          end
+    def connection
+      @connection ||= Faraday.new(@json_rpc_endpoint) do |f|
+        f.adapter :net_http_persistent, pool_size: 5, idle_timeout: @idle_timeout
+      end.tap do |connection|
+        unless @json_rpc_endpoint.user.blank?
+          connection.basic_auth(@json_rpc_endpoint.user, @json_rpc_endpoint.password)
         end
       end
     end
   end
+end
 end
