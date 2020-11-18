@@ -2,6 +2,6 @@
 
 module Peatio
   module Thought
-    VERSION = "2.6.7.1"
+    VERSION = "2.6.7.2"
   end
 end
