@@ -28,7 +28,7 @@ module Peatio
           txs_array.append(*txs)
         end
 
-        Peatio::Block.new(block_number, txs_array)
+        Peatio::Block.new(block_number, block_txs)
     rescue Client::Error => e
       raise Peatio::Blockchain::ClientError, e
     end
