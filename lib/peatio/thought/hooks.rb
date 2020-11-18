@@ -28,8 +28,8 @@ module Peatio
         end
 
         def register
-          Peatio::Blockchain.registry[:thought] = Thought::Blockchain.new
-          Peatio::Wallet.registry[:thoughtd] = Thought::Wallet.new
+          Peatio::Blockchain.registry[:thought] = Thought::Blockchain
+          Peatio::Wallet.registry[:thoughtd] = Thought::Wallet
         end
       end
 
